@@ -101,7 +101,7 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"{DBLabels.Score}{m_Points}";
+        ScoreText.text = $"{DBLabels.Score} : {m_PlayerName} : {m_Points}";
 
         m_bestScore = m_Points > m_bestScore ? m_Points : m_bestScore;
         BestScoreText.text = $"{DBLabels.bestScore} {m_PlayerName} : {m_bestScore}";

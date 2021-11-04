@@ -24,8 +24,9 @@ public class MenuUIHandler : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;        ReadDataManager();
-        
+        Instance = this;
+        ReadDataManager();
+        inputName.Select();
     }
 
     public void UpdateDataManager()
