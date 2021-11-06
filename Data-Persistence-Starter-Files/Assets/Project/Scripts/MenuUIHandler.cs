@@ -13,11 +13,16 @@ public class MenuUIHandler : MonoBehaviour
 {
     public static MenuUIHandler Instance;
 
-    [SerializeField, Tooltip("Drag here the input text name")]
-    TMP_InputField inputName;
-    [SerializeField, Tooltip("Drag here the maxSores text")]
-    TextMeshProUGUI maxScoresList;
+    [Tooltip("Drag here the input text name")]
+    public TMP_InputField inputName;
+    [Tooltip("Drag here the maxSores text")]
+    public TextMeshProUGUI maxScoresList;
 
+    [SerializeField, Tooltip("Drag here message error UI dialog box")]
+    GameObject ErrorMessageBox;
+    [SerializeField, Tooltip("Drag here input error message text name")]
+    public TMP_InputField inputErrorName;
+        
     private string maxScoresString;
 
     const char separator = '\n';
@@ -38,13 +43,36 @@ public class MenuUIHandler : MonoBehaviour
 
     public void ReadDataManager()
     {
-        maxScoresList.text = ConvertMaxScoreToString();
+        if (DataManager.Instance != null)
+        {
+            inputName.text = DataManager.Instance.playerName;
+            inputErrorName.text = DataManager.Instance.playerName;
+            maxScoresList.text = ConvertMaxScoreToString();
+        }
     }
 
     public void PlayArkanoid()
     {
-        DataManager.Instance.UpdateData();        
-        SceneManager.LoadScene(1);
+        if (string.IsNullOrEmpty(inputName.text))
+        {
+            ErrorMessageBox.SetActive(true);
+            inputErrorName.Select();
+        }
+        else 
+        {
+            DataManager.Instance.UpdateData();
+            SceneManager.LoadScene(1);
+        }
+    }
+
+    public void ChangeName()
+    {
+        inputName.text = inputErrorName.text;
+    }
+
+    public void SelectInputName()
+    {
+        inputName.Select();
     }
 
     public void Quit()
@@ -73,7 +101,7 @@ public class MenuUIHandler : MonoBehaviour
         }
     }
 
-    private string ConvertMaxScoreToString()
+    public string ConvertMaxScoreToString()
     {
         string maxScores;
         if (DataManager.Instance != null)

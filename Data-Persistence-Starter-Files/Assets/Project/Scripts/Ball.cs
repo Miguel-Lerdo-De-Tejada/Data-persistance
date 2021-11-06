@@ -5,7 +5,29 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    [HideInInspector]
+    public static Ball Instance;
+
+    [HideInInspector]
+    public AudioSource sound;
+
+    [HideInInspector]
+    public bool isOutOfBricks;
+
+    [Tooltip("Drag here the shoot clip.")] public AudioClip shoot;
+    [Tooltip("Drag here the bump clip.")] public AudioClip bump;
+
+    class Tags
+    {
+        public static string brick = "Brick";
+    }
+
     private Rigidbody m_Rigidbody;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     void Start()
     {
@@ -14,13 +36,16 @@ public class Ball : MonoBehaviour
     
     private void OnCollisionExit(Collision other)
     {
+        PlaySoundOnBounce(other);
         Bounce();
+        isOutOfBricks = CheckOutOfBricks();        
     }
 
     // Obtain the ball components needed to the ball code.
     private void ObtainComponents()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        sound = GetComponent<AudioSource>();        
     }
 
     // Make the ball bounce when it hits an obstacle.
@@ -44,5 +69,24 @@ public class Ball : MonoBehaviour
         }
 
         m_Rigidbody.velocity = velocity;
+    }
+
+    void PlaySoundOnBounce(Collision obstacle)
+    {
+        if (obstacle.gameObject.CompareTag(Tags.brick))
+        {
+            sound.PlayOneShot(bump);
+        }
+        else
+        {
+            sound.PlayOneShot(shoot);
+        }
+    }
+
+    bool CheckOutOfBricks()
+    {
+        bool isEmpty = false;
+        isEmpty = GameObject.FindGameObjectsWithTag(Tags.brick).Length < 1 ? true : false;        
+        return isEmpty;
     }
 }
