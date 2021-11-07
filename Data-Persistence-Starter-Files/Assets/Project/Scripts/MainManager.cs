@@ -25,6 +25,9 @@ public class MainManager : MonoBehaviour
     private string m_BestPlayerName;
     private int m_BestScore;
 
+    private const float c_ballAccelerationIncrement=0.1f;
+    private const float c_ballMaxVelocityIncrement = 1.0f;
+
     private struct DBLabels
     {
         public static string bestScore = "Best score :";
@@ -85,8 +88,11 @@ public class MainManager : MonoBehaviour
         {
             if (Ball.Instance.isOutOfBricks)
             {
-                Destroy(Ball.Instance.gameObject);
-                GameOver();
+                Ball.Instance.isOutOfBricks = false;
+                Ball.Instance.acceleration += c_ballAccelerationIncrement;
+                Ball.Instance.maxVelocity += c_ballMaxVelocityIncrement;
+                                
+                BuildBrickWall();                
             }
         }
     }

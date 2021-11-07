@@ -8,6 +8,9 @@ public class Ball : MonoBehaviour
     [HideInInspector]
     public static Ball Instance;
 
+    [HideInInspector] public float acceleration = 0.1f;
+    [HideInInspector] public float maxVelocity = 3.0f;
+
     [HideInInspector]
     public AudioSource sound;
 
@@ -54,18 +57,18 @@ public class Ball : MonoBehaviour
         var velocity = m_Rigidbody.velocity;
 
         //after a collision we accelerate a bit
-        velocity += velocity.normalized * 0.01f;
+        velocity += velocity.normalized * acceleration;
 
         //check if we are not going totally vertically as this would lead to being stuck, we add a little vertical force
-        if (Vector3.Dot(velocity.normalized, Vector3.up) < 0.1f)
+        if (Vector3.Dot(velocity.normalized, Vector3.up) < acceleration)
         {
             velocity += velocity.y > 0 ? Vector3.up * 0.5f : Vector3.down * 0.5f;
         }
 
         //max velocity
-        if (velocity.magnitude > 3.0f)
+        if (velocity.magnitude > maxVelocity)
         {
-            velocity = velocity.normalized * 3.0f;
+            velocity = velocity.normalized * maxVelocity;
         }
 
         m_Rigidbody.velocity = velocity;

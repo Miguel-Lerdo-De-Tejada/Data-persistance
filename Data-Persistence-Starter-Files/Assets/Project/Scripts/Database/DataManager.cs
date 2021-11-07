@@ -50,7 +50,7 @@ public class DataManager: MonoBehaviour
         ArkanoidGame arkanoid = new ArkanoidGame();
 
         arkanoid.playerName = MenuUIHandler.Instance.inputName.text;
-        arkanoid.maxScores = MenuUIHandler.Instance.ConvertMaxScoreToString();
+        arkanoid.maxScores = MenuUIHandler.Instance.maxScoresList.text;
 
         string jsonFile = JsonUtility.ToJson(arkanoid);
 
